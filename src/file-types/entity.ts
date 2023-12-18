@@ -57,7 +57,7 @@ export class Entity {
 
 		classFile.formatText()
 
-		logger.info(`Generated class ${formatClassName(this.name)} in ${filePath}`)
+		logger.info(`generated class ${formatClassName(this.name)} in ${filePath}`)
 		return {
 			fileName,
 			filePath,

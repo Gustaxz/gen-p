@@ -4,6 +4,7 @@ import { PrismaModel } from "./types"
 import { logger } from "../logger"
 
 async function readJsonFile(path: string) {
+	logger.info("reading json file " + path)
 	try {
 		const jsonFile = await readFile(path, "utf-8")
 		return JSON.parse(jsonFile)
