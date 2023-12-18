@@ -6,6 +6,8 @@ export function translatePrismaToTypescript(prismaType: string): string {
 			return "string"
 		case "boolean":
 			return "boolean"
+		case "null":
+			return "null"
 		default:
 			return "any"
 	}
