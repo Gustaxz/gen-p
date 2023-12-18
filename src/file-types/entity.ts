@@ -4,11 +4,9 @@ import { logger } from "../logger"
 import { formatClassName } from "../utils/format-class-name"
 import { handleMultipleTypes } from "../utils/handle-multiple-types"
 
-export type SupportedTypes = "string" | "number" | "boolean"
-
 export interface Attribute {
 	name: string
-	type: SupportedTypes | SupportedTypes[]
+	type: string | string[]
 }
 
 // TODO: generate with getters and setters
