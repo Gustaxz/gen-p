@@ -2,12 +2,13 @@ import { Project, StructureKind, Scope } from "ts-morph"
 import { formatFileName } from "../utils/format-file-name"
 import { logger } from "../logger"
 import { formatClassName } from "../utils/format-class-name"
+import { handleMultipleTypes } from "../utils/handle-multiple-types"
 
 export type SupportedTypes = "string" | "number" | "boolean"
 
 export interface Attribute {
 	name: string
-	type: SupportedTypes
+	type: SupportedTypes | SupportedTypes[]
 }
 
 // TODO: generate with getters and setters
@@ -43,14 +44,14 @@ export class Entity {
 			parameters: this.attributes.map((attribute) => ({
 				scope: Scope.Private,
 				name: `${attribute.name}_`,
-				type: attribute.type,
+				type: handleMultipleTypes(attribute.type),
 			})),
 		})
 
 		classDeclaration!.addGetAccessors(
 			this.attributes.map((attribute) => ({
 				name: attribute.name,
-				type: attribute.type,
+				type: handleMultipleTypes(attribute.type),
 				scope: Scope.Public,
 				statements: [`return this.${attribute.name}_`],
 			}))
