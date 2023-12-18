@@ -12,6 +12,8 @@
 	"dependencies": {
 		"@prisma/client": "^5.7.0",
 		"@types/node": "^20.10.4",
+		"pino": "^8.17.1",
+		"pino-pretty": "^10.3.0",
 		"prisma": "^5.7.0",
 		"ts-morph": "^21.0.1",
 		"ts-node-dev": "^2.0.0",
