@@ -32,5 +32,8 @@ export async function parseJsonSchema(path: string) {
 		modelPropertiesKeys.push(object)
 	})
 
-	return modelPropertiesKeys
+	return {
+		name: modelName,
+		properties: modelPropertiesKeys,
+	}
 }
