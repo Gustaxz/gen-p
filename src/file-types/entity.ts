@@ -1,8 +1,15 @@
-import { Project, StructureKind, Scope } from "ts-morph"
+import { Project, StructureKind, Scope, SourceFile } from "ts-morph"
 import { formatFileName } from "../utils/format-file-name"
 import { logger } from "../logger"
 import { formatClassName } from "../utils/format-class-name"
 import { handleMultipleTypes } from "../utils/handle-multiple-types"
+
+export interface EntityProps {
+	fileName: string
+	filePath: string
+	className: string
+	file: SourceFile
+}
 
 export interface Attribute {
 	name: string
@@ -18,7 +25,7 @@ export class Entity {
 		private attributes: Attribute[]
 	) {}
 
-	public generateContent() {
+	public generateContent(): EntityProps {
 		const fileName = formatFileName(this.name)
 		const filePath = `${this.dir}/${fileName}.ts`
 
