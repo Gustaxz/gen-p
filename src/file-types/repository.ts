@@ -14,6 +14,8 @@ export class Repository {
 		const repositoryName = `${this.entity.className}Repository`
 		const repositoryFileName = `${this.entity.fileName}-repository.ts`
 		const repositoryFilePath = `${this.dir}/${repositoryFileName}`
+		const entityName =
+			this.entity.className.charAt(0).toLowerCase() + this.entity.className.slice(1)
 
 		const repositoryFile = this.projectFile.createSourceFile(
 			repositoryFilePath,
@@ -40,7 +42,7 @@ export class Repository {
 								isAbstract: true,
 								parameters: [
 									{
-										name: "entity",
+										name: entityName,
 										type: this.entity.className,
 									},
 								],
@@ -51,7 +53,7 @@ export class Repository {
 								isAbstract: true,
 								parameters: [
 									{
-										name: "entity",
+										name: entityName,
 										type: this.entity.className,
 									},
 								],
