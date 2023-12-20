@@ -3,7 +3,9 @@ import { EntityProps } from "../entity"
 import { logger } from "../../logger"
 import { repoAbstractMethod } from "./repo-abstract-methods"
 import { RepositoryProps } from "."
+import { idAttributeType } from "../../utils/id-atrribute-type"
 
+//TODO: handle prisma errors and prisma import
 export class PrismaRepository {
 	constructor(
 		private projectFile: Project,
@@ -82,6 +84,66 @@ export class PrismaRepository {
 								statements: [
 									`const res = await prisma.${entityName}.create({ data: ${entityName} });`,
 									`const new${this.repository.entity.className} = new ${this.repository.entity.className}(res);`,
+									`return new${this.repository.entity.className};`,
+								],
+							},
+							{
+								name: "update",
+								isAsync: true,
+								returnType: `Promise<${this.repository.entity.className}>`,
+								parameters: [
+									{
+										name: entityName,
+										type: this.repository.entity.className,
+									},
+								],
+								statements: [
+									`const res = await prisma.${entityName}.update({ data: ${entityName}, where: ${entityName}});`,
+									`const new${this.repository.entity.className} = new ${this.repository.entity.className}(res);`,
+									`return new${this.repository.entity.className};`,
+								],
+							},
+							{
+								name: "delete",
+								isAsync: true,
+								returnType: `Promise<${this.repository.entity.className}>`,
+								parameters: [
+									{
+										name: entityName,
+										type: this.repository.entity.className,
+									},
+								],
+								statements: [
+									`const res = await prisma.${entityName}.delete({ where: ${entityName}});`,
+									`const new${this.repository.entity.className} = new ${this.repository.entity.className}(res);`,
+									`return new${this.repository.entity.className};`,
+								],
+							},
+							{
+								name: "findById",
+								isAsync: true,
+								returnType: `Promise<${this.repository.entity.className} | null>`,
+								parameters: [
+									{
+										name: "id",
+										type: idAttributeType(this.repository.entity),
+									},
+								],
+								statements: [
+									`const res = await prisma.${entityName}.findUnique({ where: { id } });`,
+									`if (!res) return null;`,
+									`const new${this.repository.entity.className} = new ${this.repository.entity.className}(res);`,
+									`return new${this.repository.entity.className};`,
+								],
+							},
+							{
+								name: "findAll",
+								isAsync: true,
+								returnType: `Promise<${this.repository.entity.className}[]>`,
+								parameters: [],
+								statements: [
+									`const res = await prisma.${entityName}.findMany();`,
+									`const new${this.repository.entity.className} = res.map((entity) => new ${this.repository.entity.className}(entity));`,
 									`return new${this.repository.entity.className};`,
 								],
 							},
