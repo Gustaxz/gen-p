@@ -1,20 +1,28 @@
-import { Project, StructureKind } from "ts-morph"
+import { Project, SourceFile, StructureKind } from "ts-morph"
 import { EntityProps } from "../entity"
 import { logger } from "../../logger"
 import { repoAbstractMethod } from "./repo-abstract-methods"
+
+export interface RepositoryProps {
+	entity: EntityProps
+	repositoryName: string
+	repositoryFileName: string
+	repositoryFilePath: string
+	repositoryFile: SourceFile
+}
 
 export class Repository {
 	constructor(
 		private projectFile: Project,
 		private entity: EntityProps,
 		private dir: string,
-		private entityRelativePath: string
+		private moduleRelativePath: string
 	) {}
 
-	public generateContent() {
+	public generateContent(): RepositoryProps {
 		const repositoryName = `${this.entity.className}Repository`
-		const repositoryFileName = `${this.entity.fileName}-repository.ts`
-		const repositoryFilePath = `${this.dir}/${repositoryFileName}`
+		const repositoryFileName = `${this.entity.fileName}-repository`
+		const repositoryFilePath = `${this.dir}/${repositoryFileName}.ts`
 		const entityName =
 			this.entity.className.charAt(0).toLowerCase() + this.entity.className.slice(1)
 
@@ -29,7 +37,7 @@ export class Repository {
 								name: this.entity.className,
 							},
 						],
-						moduleSpecifier: `${this.entityRelativePath}/${this.entity.fileName}`,
+						moduleSpecifier: `${this.moduleRelativePath}/${this.entity.fileName}`,
 					},
 					{
 						kind: StructureKind.Class,
@@ -93,6 +101,7 @@ export class Repository {
 		logger.info(`generated repository ${repositoryName} in ${repositoryFilePath}`)
 
 		return {
+			entity: this.entity,
 			repositoryName,
 			repositoryFileName,
 			repositoryFilePath,
