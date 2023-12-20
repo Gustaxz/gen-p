@@ -5,6 +5,7 @@ import { repoAbstractMethod } from "./repo-abstract-methods"
 import { RepositoryProps } from "."
 import { idAttributeType } from "../../utils/id-atrribute-type"
 
+// TODO: better integration with class implementation, ensuring the same methods are implemented in both
 //TODO: handle prisma errors and prisma import
 export class PrismaRepository {
 	constructor(

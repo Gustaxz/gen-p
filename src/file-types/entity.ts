@@ -17,7 +17,6 @@ export interface Attribute {
 	type: string | string[]
 }
 
-// TODO: generate with getters and setters
 export class Entity {
 	constructor(
 		private projectFile: Project,
