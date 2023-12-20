@@ -34,7 +34,10 @@ export async function parseJsonSchema(path: string) {
 					translatePrismaToTypescript(type)
 				)
 			} else {
-				object.type = translatePrismaToTypescript(modelProperties[key].type)
+				object.type = translatePrismaToTypescript(
+					modelProperties[key].type,
+					modelProperties[key].format
+				)
 			}
 
 			modelPropertiesKeys.push(object)
