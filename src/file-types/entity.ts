@@ -28,6 +28,7 @@ export class Entity {
 	public generateContent(): EntityProps {
 		const fileName = formatFileName(this.name)
 		const filePath = `${this.dir}/${fileName}.ts`
+		const interfaceName = `${formatClassName(this.name)}Props`
 
 		const classFile = this.projectFile.createSourceFile(
 			filePath,
@@ -43,14 +44,24 @@ export class Entity {
 			{ overwrite: true }
 		)
 
+		classFile.addInterface({
+			name: interfaceName,
+			properties: this.attributes.map((attribute) => ({
+				name: attribute.name,
+				type: handleMultipleTypes(attribute.type),
+			})),
+		})
+
 		const classDeclaration = classFile.getClass(formatClassName(this.name))
 
 		classDeclaration!.addConstructor({
-			parameters: this.attributes.map((attribute) => ({
-				scope: Scope.Private,
-				name: `${attribute.name}_`,
-				type: handleMultipleTypes(attribute.type),
-			})),
+			parameters: [
+				{
+					scope: Scope.Private,
+					name: "props",
+					type: interfaceName,
+				},
+			],
 		})
 
 		classDeclaration!.addGetAccessors(
@@ -58,7 +69,7 @@ export class Entity {
 				name: attribute.name,
 				type: handleMultipleTypes(attribute.type),
 				scope: Scope.Public,
-				statements: [`return this.${attribute.name}_`],
+				statements: [`return this.props.${attribute.name}`],
 			}))
 		)
 
