@@ -5,6 +5,7 @@ import { formatClassName } from "../utils/format-class-name"
 import { handleMultipleTypes } from "../utils/handle-multiple-types"
 
 export interface EntityProps {
+	attributes: Attribute[]
 	fileName: string
 	filePath: string
 	className: string
@@ -77,6 +78,7 @@ export class Entity {
 
 		logger.info(`generated class ${formatClassName(this.name)} in ${filePath}`)
 		return {
+			attributes: this.attributes,
 			fileName,
 			filePath,
 			className: formatClassName(this.name),

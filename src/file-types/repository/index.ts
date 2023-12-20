@@ -2,6 +2,7 @@ import { Project, SourceFile, StructureKind } from "ts-morph"
 import { EntityProps } from "../entity"
 import { logger } from "../../logger"
 import { repoAbstractMethod } from "./repo-abstract-methods"
+import { idAttributeType } from "../../utils/id-atrribute-type"
 
 export interface RepositoryProps {
 	entity: EntityProps
@@ -77,11 +78,11 @@ export class Repository {
 							}),
 							repoAbstractMethod({
 								name: "findById",
-								returnType: `Promise<${this.entity.className}>`,
+								returnType: `Promise<${this.entity.className} | null>`,
 								parameters: [
 									{
 										name: "id",
-										type: "string",
+										type: idAttributeType(this.entity),
 									},
 								],
 							}),
