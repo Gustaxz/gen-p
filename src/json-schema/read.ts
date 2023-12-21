@@ -28,9 +28,7 @@ async function parseModels(definitions: any, modelName: string) {
 
 		object.name = key
 
-		const options = Object.keys(modelProperties[key])
-
-		object.type = translatePrismaToTypescript(modelProperties[key], options)
+		object.type = translatePrismaToTypescript(modelProperties[key])
 
 		modelPropertiesKeys.push(object)
 	})

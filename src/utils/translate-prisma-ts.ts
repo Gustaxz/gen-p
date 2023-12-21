@@ -1,17 +1,19 @@
-export function translatePrismaToTypescript(propterty: any, options: string[]): string {
+export function translatePrismaToTypescript(property: any): string {
+	const options = Object.keys(property)
+
 	if (options.includes("type")) {
-		if (propterty["type"] instanceof Array) {
-			const pipeType = propterty["type"].map((type: string) => {
-				return translatePrismaToTypescript({ type }, ["type"])
+		if (property["type"] instanceof Array) {
+			const pipeType = property["type"].map((type: string) => {
+				return translatePrismaToTypescript({ type })
 			})
 
 			return pipeType.join(" | ")
 		}
 
-		switch (propterty["type"]) {
+		switch (property["type"]) {
 			case "string":
 				if (options.includes("format")) {
-					switch (propterty["format"]) {
+					switch (property["format"]) {
 						case "date-time":
 							return "Date"
 						default:
@@ -25,8 +27,13 @@ export function translatePrismaToTypescript(propterty: any, options: string[]): 
 				return "boolean"
 			case "array":
 				if (options.includes("items")) {
-					const arrayType = propterty["items"]["type"]
-					return `${translatePrismaToTypescript({ type: arrayType }, ["type"])}[]`
+					const arrayType = property["items"]["type"]
+					const res = translatePrismaToTypescript({
+						type: arrayType,
+						format: property["format"],
+					})
+					console.log(res, { type: arrayType, format: property["format"] })
+					return `${res}[]`
 				}
 
 				return "any[]"

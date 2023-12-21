@@ -5,9 +5,5 @@ export function idAttributeType(entity: EntityProps): string {
 	if (!idAttribute) {
 		throw new Error(`Entity ${entity.className} has no id attribute`)
 	}
-	if (idAttribute.type instanceof Array) {
-		return idAttribute.type[0]
-	} else {
-		return idAttribute.type
-	}
+	return idAttribute.type
 }
