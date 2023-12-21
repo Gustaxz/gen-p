@@ -28,16 +28,9 @@ async function parseModels(definitions: any, modelName: string) {
 
 		object.name = key
 
-		if (modelProperties[key].type instanceof Array) {
-			object.type = modelProperties[key].type.map((type: string) =>
-				translatePrismaToTypescript(type)
-			)
-		} else {
-			object.type = translatePrismaToTypescript(
-				modelProperties[key].type,
-				modelProperties[key].format
-			)
-		}
+		const options = Object.keys(modelProperties[key])
+
+		object.type = translatePrismaToTypescript(modelProperties[key], options)
 
 		modelPropertiesKeys.push(object)
 	})
