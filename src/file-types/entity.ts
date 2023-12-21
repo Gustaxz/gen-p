@@ -14,7 +14,7 @@ export interface EntityProps {
 
 export interface Attribute {
 	name: string
-	type: string | string[]
+	type: string
 }
 
 export class Entity {

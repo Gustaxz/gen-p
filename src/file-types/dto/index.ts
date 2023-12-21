@@ -14,9 +14,8 @@ import { validateTypes } from "./validate-types"
 
 export interface Attribute {
 	name: string
-	type: string | string[]
+	type: string
 }
-
 export class DTO {
 	constructor(
 		private projectFile: Project,
