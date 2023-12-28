@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"license": "MIT",
+	"bin": {
+		"genp": "./dist/index.js"
+	},
 	"scripts": {
 		"start": "tsnd --respawn src/index.ts",
 		"build": "tsc",
