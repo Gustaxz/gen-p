@@ -12,7 +12,7 @@
 
 1. Clone the repo
     ```sh
-    git clone
+    git clone https://github.com/Gustaxz/gen-p.git
     ```
 2. Install packages
     ```sh
