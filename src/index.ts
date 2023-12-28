@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Project, StructureKind, SourceFileStructure } from "ts-morph"
 import { Entity } from "./file-types/entity"
 import path from "path"
