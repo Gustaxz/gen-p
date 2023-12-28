@@ -5,9 +5,11 @@ import { readFile } from "fs/promises"
 import { parseJsonSchema } from "./json-schema/read"
 import { logger } from "./logger"
 import { Repository } from "./file-types/repository"
-import { PrismaClient } from "@prisma/client"
+import { PrismaRepository } from "./file-types/repository/prisma-repository"
+import { formatFileName } from "./utils/format-file-name"
+import { DTO } from "./file-types/dto"
 
-const prisma = new PrismaClient()
+import { Command } from "commander"
 
 // export type PrismaAction =
 //     | 'findUnique'
@@ -30,17 +32,25 @@ const prisma = new PrismaClient()
 //     | 'findRaw'
 //     | 'groupBy'
 
-const jsonSchemaPath = path.join(__dirname, "../prisma/json-schema/json-schema.json")
-
-async function main() {
+async function generateFiles(jsonSchemaPath: string) {
 	try {
-		const model = await parseJsonSchema(jsonSchemaPath)
-
 		const project = new Project()
-		const dirPath = path.join(__dirname, "../gen").replace(/\\/g, "/")
+		const models = await parseJsonSchema(jsonSchemaPath)
 
-		const entity = new Entity(project, dirPath, model.name, model.properties).generateContent()
-		new Repository(project, entity, dirPath, ".").generateContent()
+		models.forEach((model) => {
+			const dirPath = path
+				.join(__dirname, `../gen/${formatFileName(model.name)}`)
+				.replace(/\\/g, "/")
+			new DTO(project, dirPath, model.name, model.properties).generateContent()
+			const entity = new Entity(
+				project,
+				dirPath,
+				model.name,
+				model.properties
+			).generateContent()
+			const repository = new Repository(project, entity, dirPath, ".").generateContent()
+			new PrismaRepository(project, repository, dirPath, ".").generateContent()
+		})
 
 		project.saveSync()
 	} catch (err: any) {
@@ -48,4 +58,17 @@ async function main() {
 	}
 }
 
-main()
+const program = new Command()
+program
+	.name("gen-p")
+	.description("generate dto, entity, repository, prisma repository from prisma-schema")
+	.version("0.0.1")
+
+program
+	.command("generate <jsonSchemaPath>")
+	.description("generate <jsonSchemaPath>")
+	.action(async (jsonSchemaPath) => {
+		await generateFiles(jsonSchemaPath)
+	})
+
+program.parse()

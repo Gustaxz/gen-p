@@ -32,7 +32,6 @@ export function translatePrismaToTypescript(property: any): string {
 						type: arrayType,
 						format: property["format"],
 					})
-					console.log(res, { type: arrayType, format: property["format"] })
 					return `${res}[]`
 				}
 
